@@ -31,26 +31,24 @@ long long modMul(long long a, long long b, long long m)
 
 int main()
 {
-	long long n, a, b, i, mod, factA, factB, factAB;
+	long long n, a, b, i, acc, mod, factA, factB, factAB;
 	mod = 1000000007LL;
 	std::cin >> n;
+	long long facts[1000001];
+	facts[0] = 1;
+	i = 1;
+	acc = 1;
+	while (i < 1000001)
+	{
+		acc = (acc * i) % mod;
+		facts[i] = acc;
+		i++;
+	}
 	while (n > 0)
 	{
 		std::cin >> a >> b;
 		i = 1;
-		factA = 1;
-		factB = 1;
-		factAB = 1;
-		while (i <= a)
-		{
-			if (i <= a - b)
-				factAB = (factAB * i) % mod;
-			if (i <= b)
-				factB = (factB * i) % mod;
-			factA = (factA * i) % mod;
-			i++;
-		}
-		std::cout << modDiv(factA , modMul(factB, factAB, mod), mod) << std::endl;
+		std::cout << modDiv(facts[a] , modMul(facts[b], facts[a - b], mod), mod) << std::endl;
 		n--;
 	}
 }
