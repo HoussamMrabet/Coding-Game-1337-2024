@@ -1,39 +1,71 @@
 #include <iostream>
-#include <vector>
 
-long long SieveOfEratosthenes_algorithm(long long n)
+bool is_prime(long long x)
 {
-	if (n < 2) return 0;
-    std::vector<bool> prime(n + 1, true);
-	std::vector<long long> prime_sum(n + 1, 0);
-	long long	sum;
-	sum = 0;
-	prime[0] = prime[1] = false;
-    for (int p = 2; p * p <= n; p++) {
-        if (prime[p]) {
-            for (long long i = p * p; i <= n; i += p) {
-                prime[i] = false;
-            }
-        }
+	long long	i;
+	i = 2;
+    if (x <= 1) {
+        return false;
     }
-    for (long long p = 2; p <= n; p++) {
-        if (prime[p]) {
-            sum += p;
-        }
-        prime_sum[p] = sum;
+    if (x <= 3) {
+        return true;
     }
-	return (sum);
+    while (i < x && i != 1001)
+	{
+        if (x % i == 0)
+            return false;
+        i++;
+    }
+	return (true);
 }
 
 int	main()
 {
-	long long	T, N, add, i;
+	long long	T, N, i, j, sum;
 
+	long long	primes[78498];
+	long long	primes_sum[78498];
+
+	i = 0;
+	j = 0;
+	sum = 0;
+	while (i < 1000001 && j < 78498)
+	{
+		if (is_prime(i))
+			primes[j++] = i;
+		i++;
+	}
+	i = 0;
+	while (i < 78498)
+	{
+		sum += primes[i];
+		primes_sum[i] = sum;
+		i++;
+	}
 	std::cin >> T;
 	while (T > 0)
 	{
+		bool done;
+		done = false;
 		std::cin >> N;
-		std::cout << SieveOfEratosthenes_algorithm(N) << std::endl;
+		i = 0;
+		if (N == 1000000)
+			std::cout << primes_sum[78497] << std::endl;
+		else
+		{
+			while (i < 78498)
+			{
+				if (primes[i] > N)
+				{
+					std::cout << primes_sum[i - 1] << std::endl;;
+					done = true;
+					break ;
+				}
+				i++;
+			}
+			if (!done)
+				std::cout << primes_sum[78497] << std::endl;
+		}
 		T--;
 	}
 }
